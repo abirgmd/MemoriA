@@ -1,9 +1,13 @@
 package MemorIA.entity;
 
+import MemorIA.entity.diagnostic.Diagnostic;
+import MemorIA.entity.Traitements.Traitements;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,4 +40,10 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Diagnostic> diagnostics;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Traitements> traitements;
 }
