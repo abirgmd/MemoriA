@@ -1,0 +1,86 @@
+<div class="patients-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dossiers Patients</h1>
+            <p class="page-subtitle">{{ patients.length }} patients actifs</p>
+        </div>
+        <button class="btn btn-primary">
+            <lucide-icon [img]="icons.UserPlus" size="20"></lucide-icon>
+            Nouveau patient
+        </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+        <div class="search-box">
+            <lucide-icon [img]="icons.Search" size="20"></lucide-icon>
+            <input type="search" placeholder="Rechercher un patient..." class="search-input-simple" />
+        </div>
+        <button class="btn btn-secondary">
+            <lucide-icon [img]="icons.Filter" size="20"></lucide-icon>
+            Filtres
+        </button>
+    </div>
+
+    <!-- Patients Table -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Âge</th>
+                        <th>Dernier test</th>
+                        <th>Score MMSE</th>
+                        <th>Tendance</th>
+                        <th>Statut</th>
+                        <th>Prochain RDV</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let patient of patients">
+                        <td>
+                            <div class="patient-info">
+                                <div class="patient-avatar">
+                                    {{ getInitials(patient.name) }}
+                                </div>
+                                <span class="patient-name">{{ patient.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ patient.age }} ans</td>
+                        <td>{{ formatDate(patient.lastTest) }}</td>
+                        <td>
+                            <span class="score-badge">{{ patient.score }}/30</span>
+                        </td>
+                        <td>
+                            <div class="trend-indicator">
+                                <lucide-icon *ngIf="patient.trend === 'down'" [img]="icons.TrendingDown" size="20"
+                                    class="trend-down"></lucide-icon>
+                                <lucide-icon *ngIf="patient.trend === 'up'" [img]="icons.TrendingUp" size="20"
+                                    class="trend-up"></lucide-icon>
+                                <span *ngIf="patient.trend === 'stable'" class="trend-stable">—</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span [class]="'status-badge ' + getStatusClass(patient.status)">
+                                {{ getStatusLabel(patient.status) }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="appointment-date">
+                                <lucide-icon [img]="icons.Clock" size="16"></lucide-icon>
+                                {{ formatDate(patient.nextAppointment) }}
+                            </div>
+                        </td>
+                        <td>
+                            <a [routerLink]="['/patients', patient.id]" class="btn btn-sm btn-secondary">
+                                Voir détails
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

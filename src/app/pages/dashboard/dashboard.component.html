@@ -1,0 +1,143 @@
+<div class="dashboard-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="/" class="breadcrumb-link">🏠</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Dashboard</span>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">Dashboard</h1>
+
+    <!-- Metrics Grid -->
+    <section class="metrics-grid" aria-label="Métriques principales">
+        <app-metric-card title="Tests Réalisés" [value]="completedTests()" subtitle="Total tests complétés" trend="+12%"
+            [icon]="icons.ClipboardCheck" color="blue"></app-metric-card>
+
+        <app-metric-card title="Patients Suivis" [value]="activePatients()" subtitle="Patients actifs" trend="+2"
+            [icon]="icons.Users" color="green"></app-metric-card>
+
+        <app-metric-card title="Assignations" [value]="pendingAssignments()" subtitle="En attente" trend="Urgent: 2"
+            [icon]="icons.Calendar" color="orange"></app-metric-card>
+
+        <app-metric-card title="Catalogue Tests" [value]="totalTests()" subtitle="Tests disponibles" trend="New: 1"
+            [icon]="icons.AlertCircle" color="red"></app-metric-card>
+    </section>
+
+    <!-- Charts and Data Visualization -->
+    <section class="data-visualization">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2 class="chart-title">Unique Visitor</h2>
+            </div>
+            <div class="chart-body">
+                <svg class="line-chart" viewBox="0 0 600 250" preserveAspectRatio="xMidYMid meet">
+                    <!-- Grid lines -->
+                    <ng-container *ngFor="let i of [0, 1, 2, 3, 4, 5, 6]">
+                        <line [attr.x1]="40" [attr.y1]="30 + i * 30" [attr.x2]="580" [attr.y2]="30 + i * 30"
+                            stroke="var(--border)" stroke-width="1" />
+                    </ng-container>
+
+                    <!-- Y-axis labels -->
+                    <ng-container *ngFor="let value of [70, 60, 50, 40, 30, 20, 10]; let i = index">
+                        <text [attr.x]="25" [attr.y]="35 + i * 30" font-size="12" fill="var(--text-light)"
+                            text-anchor="end">
+                            {{ value }}
+                        </text>
+                    </ng-container>
+
+                    <!-- X-axis labels -->
+                    <ng-container *ngFor="let label of chartData.labels; let i = index">
+                        <text [attr.x]="60 + i * 85" [attr.y]="230" font-size="12" fill="var(--text-light)"
+                            text-anchor="middle">
+                            {{ label }}
+                        </text>
+                    </ng-container>
+
+                    <!-- Arts line (blue) -->
+                    <polyline [attr.points]="asPolylinePoints(chartData.arts)" fill="none" stroke="#4A90E2"
+                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+                    <!-- Commerce line (cyan) -->
+                    <polyline [attr.points]="asPolylinePoints(chartData.commerce)" fill="none" stroke="#00C9A7"
+                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+                    <!-- Data points for Arts -->
+                    <ng-container *ngFor="let val of chartData.arts; let i = index">
+                        <circle [attr.cx]="60 + i * 85" [attr.cy]="210 - val * 2.5" r="5" fill="#4A90E2"
+                            class="chart-point" />
+                    </ng-container>
+
+                    <!-- Data points for Commerce -->
+                    <ng-container *ngFor="let val of chartData.commerce; let i = index">
+                        <circle [attr.cx]="60 + i * 85" [attr.cy]="210 - val * 2.5" r="5" fill="#00C9A7"
+                            class="chart-point" />
+                    </ng-container>
+                </svg>
+
+                <!-- Legend -->
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background-color: #4A90E2"></span>
+                        <span class="legend-label">Arts</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background-color: #00C9A7"></span>
+                        <span class="legend-label">Commerce</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress circles -->
+        <div class="progress-cards">
+            <div class="progress-card">
+                <h3 class="progress-card-title">Customers</h3>
+                <div class="progress-stats">
+                    <div class="progress-stat-main">
+                        <span class="stat-number">826</span>
+                        <span class="stat-change stat-positive">
+                            <lucide-icon [img]="icons.TrendingUp" size="16"></lucide-icon>
+                            8.2%
+                        </span>
+                    </div>
+                    <app-progress-circle [percentage]="67" label="" [size]="140"></app-progress-circle>
+                    <div class="progress-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-dot" style="background-color: #4A90E2"></span>
+                            <span class="breakdown-label">674 New</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-dot" style="background-color: #7E7F9A"></span>
+                            <span class="breakdown-label">182 Return</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-card">
+                <h3 class="progress-card-title">Customers</h3>
+                <div class="progress-stats">
+                    <div class="progress-stat-main">
+                        <span class="stat-number">826</span>
+                        <span class="stat-change stat-positive">
+                            <lucide-icon [img]="icons.TrendingUp" size="16"></lucide-icon>
+                            8.2%
+                        </span>
+                    </div>
+                    <app-progress-circle [percentage]="73" label="" [size]="140"></app-progress-circle>
+                    <div class="progress-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-dot" style="background-color: #00C9A7"></span>
+                            <span class="breakdown-label">674 New</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-dot" style="background-color: #7E7F9A"></span>
+                            <span class="breakdown-label">182 Return</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
