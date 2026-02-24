@@ -56,7 +56,7 @@ export class SidebarComponent {
     {
       path: '/tests-cognitifs',
       label: 'Tests cognitifs',
-      icon: Brain,
+      icon: Brain      
     },
     {
       path: '/diagnosis',
