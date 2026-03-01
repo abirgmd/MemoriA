@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,6 +34,64 @@ public class CrosswordTestController {
     private final TestQuestionRepository testQuestionRepository;
     private final TestResultRepository testResultRepository;
     private final CognitiveTestRepository cognitiveTestRepository;
+
+    @GetMapping("/definitions/{testId}")
+    public ResponseEntity<Map<String, Object>> getCrosswordDefinitions(@PathVariable Long testId) {
+        try {
+            log.info("Getting crossword definitions for test ID: {}", testId);
+            
+            Map<String, Object> definitions = new HashMap<>();
+            
+            // Définitions horizontales
+            List<Map<String, Object>> horizontalDefs = Arrays.asList(
+                Map.of(
+                    "id", "H1", "number", 1, "direction", "H", "length", 5,
+                    "clue", "Gros fruit vert ou jaune du potager",
+                    "answer", "MELON", "startX", 0, "startY", 0
+                ),
+                Map.of(
+                    "id", "H2", "number", 2, "direction", "H", "length", 3,
+                    "clue", "Petit rongeur nuisible",
+                    "answer", "RAT", "startX", 0, "startY", 2
+                ),
+                Map.of(
+                    "id", "H3", "number", 3, "direction", "H", "length", 4,
+                    "clue", "Substance sucrée produite par les abeilles",
+                    "answer", "MIEL", "startX", 1, "startY", 4
+                )
+            );
+            
+            // Définitions verticales
+            List<Map<String, Object>> verticalDefs = Arrays.asList(
+                Map.of(
+                    "id", "V1", "number", 1, "direction", "V", "length", 5,
+                    "clue", "Grand mammifère marin à longues défenses",
+                    "answer", "MORSE", "startX", 0, "startY", 0
+                ),
+                Map.of(
+                    "id", "V2", "number", 2, "direction", "V", "length", 3,
+                    "clue", "On y dort la nuit",
+                    "answer", "LIT", "startX", 2, "startY", 0
+                ),
+                Map.of(
+                    "id", "V3", "number", 3, "direction", "V", "length", 3,
+                    "clue", "Voie de circulation dans une ville",
+                    "answer", "RUE", "startX", 3, "startY", 2
+                )
+            );
+            
+            definitions.put("horizontal", horizontalDefs);
+            definitions.put("vertical", verticalDefs);
+            definitions.put("gridSize", 5);
+            
+            log.info("Crossword definitions retrieved successfully");
+            return ResponseEntity.ok(definitions);
+            
+        } catch (Exception e) {
+            log.error("Error getting crossword definitions", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @PostMapping("/save-answer")
     public ResponseEntity<String> saveAnswer(@RequestBody CrosswordAnswerDto answerDto) {

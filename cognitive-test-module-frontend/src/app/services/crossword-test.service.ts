@@ -46,4 +46,8 @@ export class CrosswordTestService {
   getTestAnswers(testId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/crossword/test-answers/${testId}`);
   }
+
+  getDefinitions(testId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/crossword/definitions/${testId}`);
+  }
 }

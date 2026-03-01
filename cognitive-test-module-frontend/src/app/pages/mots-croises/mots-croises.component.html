@@ -3,7 +3,7 @@
     <div *ngIf="currentPhase() === 'INSTRUCTIONS'" class="phase-container">
         <div class="card-header-new">
             <div class="header-top">
-                <h1 class="test-title">TEST DE MOTS CROnnjISÉS</h1>
+                <h1 class="test-title">TEST DE MOTS CROISÉS - ID 6</h1>
                 <div class="phase-info">
                     <span class="phase-label">INTRODUCTION</span>
                     <span class="phase-count">Phase 1/4</span>
@@ -42,10 +42,11 @@
     </div>
 
     <!-- Phase 2: Play -->
-    <div *ngIf="currentPhase() === 'PLAY'" class="phase-container" (keydown)="handleKeyDown($event)">
+    <!-- tabindex="0" gardé pour compatibilité mais le clavier est géré par @HostListener -->
+    <div *ngIf="currentPhase() === 'PLAY'" class="phase-container" tabindex="0">
         <div class="card-header-new">
             <div class="header-top">
-                <h1 class="test-title">TEST DE MOTS CROISÉS</h1>
+                <h1 class="test-title">TEST DE MOTS CROISÉS - ID 6</h1>
                 <div class="phase-info">
                     <span class="phase-label">RÉFLEXION</span>
                     <span class="phase-count">Phase 2/4</span>
@@ -67,21 +68,25 @@
         </header>
 
         <div class="game-content">
-            <!-- Focus Area: Grid and definitions -->
             <div class="lavender-focus-box">
+
+                <!-- Grille -->
                 <div class="grid-section">
-                    <div class="crossword-grid" [style.grid-template-columns]="'repeat(' + gridSize + ', 1fr)'">
-                        <div *ngFor="let row of grid(); let y = index" class="grid-row">
-                            <div *ngFor="let cell of row; let x = index" class="grid-cell"
-                                [ngClass]="{'active': selectedCell()?.x === x && selectedCell()?.y === y, 'blocked': cell.isBlocked}"
+                    <div class="crossword-grid">
+                        <ng-container *ngFor="let row of grid(); let y = index">
+                            <div *ngFor="let cell of row; let x = index"
+                                class="grid-cell"
+                                [class.active]="selectedCell()?.x === x && selectedCell()?.y === y"
+                                [class.blocked]="cell.isBlocked"
                                 (click)="onCellClick(x, y)">
                                 <span class="cell-number" *ngIf="cell.number">{{ cell.number }}</span>
-                                <span class="cell-letter">{{ cell.letter }}</span>
+                                <span class="cell-letter" *ngIf="!cell.isBlocked">{{ cell.letter }}</span>
                             </div>
-                        </div>
+                        </ng-container>
                     </div>
                 </div>
 
+                <!-- Définitions -->
                 <div class="definitions-section">
                     <div class="def-group">
                         <h2 class="def-title">HORIZONTAUX</h2>
@@ -112,7 +117,7 @@
 
             <div class="action-footer">
                 <div class="grid-stats">
-                    <span>Cases remplies: {{ getFilledCount() }} / 25</span>
+                    <span>Cases remplies : {{ getFilledCount() }} / {{ getTotalPlayableCells() }}</span>
                 </div>
                 <div class="grid-actions">
                     <button class="btn-outline" (click)="clearGrid()">EFFACER</button>
@@ -177,7 +182,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let res of results(); let i = index">
-                            <td class="word-id">{{ i + 1 }}</td>
+                            <td class="word-id">{{ res.id }}</td>
                             <td class="user-answer-new">{{ res.user || '-' }}</td>
                             <td>
                                 <span class="status-icon"

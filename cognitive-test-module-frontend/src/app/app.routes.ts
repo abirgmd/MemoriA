@@ -19,6 +19,7 @@ import { TestOrientationSimplifieComponent } from './pages/test-orientation-simp
 import { TestPuzzlesSimplesComponent } from './pages/test-puzzles-simples/test-puzzles-simples.component';
 import { TestReconnaissanceProchesComponent } from './pages/test-reconnaissance-proches/test-reconnaissance-proches.component';
 import { TestTriCategoriesComponent } from './pages/test-tri-categories/test-tri-categories.component';
+import { TriObjetsComponent } from './pages/tri-objets/tri-objets.component';
 import { AidantMetricsComponent } from './pages/aidant-metrics/aidant-metrics.component';
 import { MedecinMetricsComponent } from './pages/medecin-metrics/medecin-metrics.component';
 
@@ -40,10 +41,13 @@ export const APP_ROUTES: Routes = [
       { path: 'cognitive-test/17', component: TestPuzzlesSimplesComponent },
       { path: 'cognitive-test/19', component: TestTriCategoriesComponent },
       { path: 'cognitive-test/20', component: TestReconnaissanceProchesComponent },
+      { path: 'cognitive-test/27', component: TriObjetsComponent }, // Test tri d'objets ID 27
+      { path: 'cognitive-test/6', component: MotsCroisesComponent }, // Test mots croisés ID 6
       { path: 'cognitive-test/:testId', component: TestRunnerComponent },
       { path: 'test-5mots', component: Test5MotsComponent },
       { path: 'test-visages', component: TestVisagesComponent },
       { path: 'test-mots-croises', component: MotsCroisesComponent },
+      { path: 'test-tri-objets', component: TriObjetsComponent },
 
       { path: 'analyses', component: AnalysesComponent },
       { path: 'calendar', component: CalendarViewComponent },
