@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ReponseRepository extends JpaRepository<Reponse, Long> {
-    List<Reponse> findByQuestionIdQuestion(Long idQuestion);
+    List<Reponse> findByQuestionId(Long questionId);
     List<Reponse> findByReponse(Boolean reponse);
 }

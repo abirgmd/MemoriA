@@ -1,17 +1,20 @@
 package MemorIA.entity.diagnostic;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "rapport")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"diagnostic", "notifications"})
+@EqualsAndHashCode(exclude = {"diagnostic", "notifications"})
 public class Rapport {
 
     @Id
@@ -34,6 +37,11 @@ public class Rapport {
     private LocalDateTime dateGeneration;
 
     @OneToOne
-    @JoinColumn(name = "id_score", nullable = false, unique = true)
-    private Score score;
+    @JoinColumn(name = "diagnostic_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({"rapport", "patientAnswers", "notifications"})
+    private Diagnostic diagnostic;
+
+    @OneToMany(mappedBy = "rapport", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"rapport", "diagnostic"})
+    private List<Notification> notifications;
 }

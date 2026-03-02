@@ -1,10 +1,10 @@
+
 package MemorIA.entity.diagnostic;
 
 import MemorIA.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -12,9 +12,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "diagnostic")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"rapport", "patientAnswers", "notifications"})
+@EqualsAndHashCode(exclude = {"rapport", "patientAnswers", "notifications"})
 public class Diagnostic {
 
     @Id
@@ -46,13 +49,40 @@ public class Diagnostic {
     @Column(name = "ai_score")
     private Double aiScore;
 
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "etat_irm")
+    private String etatIrm;
+
+    /**
+     * Transient field used by the frontend to send rapport validation status.
+     * Not persisted in the diagnostic table — it maps to rapport.valide_par_medecin.
+     */
+    @Transient
+    private Boolean valideParMedecin;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"diagnostics", "questions", "notifications", "password"})
     private User user;
 
-    @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL)
-    private List<Question> questions;
-
     @OneToOne(mappedBy = "diagnostic", cascade = CascadeType.ALL)
-    private Score score;
+    @JsonIgnoreProperties("diagnostic")
+    private Rapport rapport;
+
+    @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"diagnostic", "question"})
+    private List<PatientAnswer> patientAnswers;
+
+    @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"diagnostic", "user"})
+    private List<Notification> notifications;
 }

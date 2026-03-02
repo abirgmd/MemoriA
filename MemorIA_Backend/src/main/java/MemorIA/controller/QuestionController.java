@@ -1,7 +1,9 @@
 package MemorIA.controller;
 
+import MemorIA.dto.QuestionRequest;
 import MemorIA.entity.diagnostic.Question;
 import MemorIA.service.QuestionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,8 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-        Question savedQuestion = questionService.saveQuestion(question);
+    public ResponseEntity<Question> createQuestion(@Valid @RequestBody QuestionRequest request) {
+        Question savedQuestion = questionService.createQuestion(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedQuestion);
     }
 
@@ -54,15 +56,21 @@ public class QuestionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/diagnostic/{idDiagnostic}")
-    public ResponseEntity<List<Question>> getQuestionsByDiagnosticId(@PathVariable Long idDiagnostic) {
-        List<Question> questions = questionService.getQuestionsByDiagnosticId(idDiagnostic);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Question>> getQuestionsByUserId(@PathVariable Long userId) {
+        List<Question> questions = questionService.getQuestionsByUserId(userId);
         return ResponseEntity.ok(questions);
     }
 
-    @GetMapping("/diagnostic/{idDiagnostic}/ordered")
-    public ResponseEntity<List<Question>> getQuestionsByDiagnosticIdOrdered(@PathVariable Long idDiagnostic) {
-        List<Question> questions = questionService.getQuestionsByDiagnosticIdOrdered(idDiagnostic);
+    @GetMapping("/user/{userId}/ordered")
+    public ResponseEntity<List<Question>> getQuestionsByUserIdOrdered(@PathVariable Long userId) {
+        List<Question> questions = questionService.getQuestionsByUserIdOrdered(userId);
+        return ResponseEntity.ok(questions);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<List<Question>> getRandomQuestions() {
+        List<Question> questions = questionService.getRandomQuestions();
         return ResponseEntity.ok(questions);
     }
 }

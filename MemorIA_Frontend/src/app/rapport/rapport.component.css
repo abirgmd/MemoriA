@@ -225,6 +225,59 @@
   opacity: 1;
 }
 
+/* MRI no-image placeholder */
+.mri-no-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  border-radius: 8px;
+  background-color: var(--background-gray);
+  border: 2px dashed var(--border-gray);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.mri-no-image svg {
+  color: var(--border-gray);
+}
+
+.mri-no-image p {
+  margin: 0;
+  font-style: italic;
+}
+
+/* IRM state row */
+.irm-state {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-gray);
+}
+
+.irm-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.irm-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* Questions Section */
 .questions-section {
   margin-top: 2.5rem;

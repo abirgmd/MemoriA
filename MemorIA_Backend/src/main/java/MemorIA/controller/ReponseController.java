@@ -1,7 +1,9 @@
 package MemorIA.controller;
 
+import MemorIA.dto.ReponseRequest;
 import MemorIA.entity.diagnostic.Reponse;
 import MemorIA.service.ReponseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,8 @@ public class ReponseController {
     }
 
     @PostMapping
-    public ResponseEntity<Reponse> createReponse(@RequestBody Reponse reponse) {
-        Reponse savedReponse = reponseService.saveReponse(reponse);
+    public ResponseEntity<Reponse> createReponse(@Valid @RequestBody ReponseRequest request) {
+        Reponse savedReponse = reponseService.createReponse(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReponse);
     }
 

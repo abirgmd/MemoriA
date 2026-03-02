@@ -1,5 +1,6 @@
 package MemorIA.entity.diagnostic;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,9 @@ public class Reponse {
     @Column(nullable = false)
     private Boolean reponse;
 
+    @Column(name = "reponse_text", columnDefinition = "TEXT")
+    private String reponseText;
+
     @Column(name = "temps_reponse")
     private Double tempsReponse;
 
@@ -29,5 +33,6 @@ public class Reponse {
 
     @ManyToOne
     @JoinColumn(name = "id_question", nullable = false)
+    @JsonIgnoreProperties({"reponses", "patientAnswers", "user"})
     private Question question;
 }

@@ -2,6 +2,7 @@ package MemorIA.service;
 
 import MemorIA.entity.diagnostic.Rapport;
 import MemorIA.repository.RapportRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,11 +46,37 @@ public class RapportService {
         rapportRepository.deleteById(id);
     }
 
-    public Optional<Rapport> getRapportByScoreId(Long idScore) {
-        return rapportRepository.findByScoreIdScore(idScore);
+    public Optional<Rapport> getRapportByDiagnosticId(Long idDiagnostic) {
+        return rapportRepository.findByDiagnosticIdDiagnostic(idDiagnostic);
     }
 
     public List<Rapport> getRapportsByValidationStatus(Boolean valideParMedecin) {
         return rapportRepository.findByValideParMedecin(valideParMedecin);
+    }
+
+    public List<Rapport> searchByUserNomAndPrenom(String nom, String prenom) {
+        if (nom != null && !nom.isEmpty() && prenom != null && !prenom.isEmpty()) {
+            return rapportRepository.findByDiagnosticUserNomContainingIgnoreCaseAndDiagnosticUserPrenomContainingIgnoreCase(nom, prenom);
+        } else if (nom != null && !nom.isEmpty()) {
+            return rapportRepository.findByDiagnosticUserNomContainingIgnoreCase(nom);
+        } else if (prenom != null && !prenom.isEmpty()) {
+            return rapportRepository.findByDiagnosticUserPrenomContainingIgnoreCase(prenom);
+        }
+        return rapportRepository.findAll();
+    }
+
+    public List<Rapport> searchByDiagnosticTitre(String titre) {
+        return rapportRepository.findByDiagnosticTitreContainingIgnoreCase(titre);
+    }
+
+    public List<Rapport> getValidatedRapports(String search, String sortOrder) {
+        Sort sort = "asc".equalsIgnoreCase(sortOrder)
+                ? Sort.by("dateGeneration").ascending()
+                : Sort.by("dateGeneration").descending();
+
+        if (search == null || search.isBlank()) {
+            return rapportRepository.findByValideParMedecin(true, sort);
+        }
+        return rapportRepository.findValidatedByPatientSearch(search.trim(), sort);
     }
 }

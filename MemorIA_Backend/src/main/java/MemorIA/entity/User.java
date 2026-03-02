@@ -1,7 +1,10 @@
 package MemorIA.entity;
 
 import MemorIA.entity.diagnostic.Diagnostic;
-import MemorIA.entity.Traitements.Traitements;
+import MemorIA.entity.diagnostic.Notification;
+import MemorIA.entity.diagnostic.Question;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +24,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
@@ -42,8 +46,16 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Diagnostic> diagnostics;
 
+  
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Traitements> traitements;
+    @JsonIgnore
+    private List<Question> questions;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Notification> notifications;
 }
