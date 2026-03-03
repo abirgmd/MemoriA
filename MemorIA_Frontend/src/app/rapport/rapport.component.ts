@@ -22,7 +22,6 @@ interface DiagnosticReport {
   diagnosis: string;
   diagnosisLevel: 'normal' | 'mild' | 'moderate' | 'severe';
   mriImage?: string;
-  etatIrm?: string;
 }
 
 @Component({
@@ -134,8 +133,7 @@ export class RapportComponent implements OnInit {
       scorePercentage: 0,
       diagnosis: '',
       diagnosisLevel: 'normal',
-      mriImage: 'https://via.placeholder.com/400x400/6C2EB9/FFFFFF?text=MRI+Scan',
-      etatIrm: 'mild_impairment'
+      mriImage: 'https://via.placeholder.com/400x400/6C2EB9/FFFFFF?text=MRI+Scan'
     };
 
     this.calculateResults();
@@ -191,24 +189,6 @@ export class RapportComponent implements OnInit {
       default:
         return '#6B7280';
     }
-  }
-
-  getEtatIrmLabel(etatIrm: string): string {
-    const normalized = (etatIrm || '').toLowerCase().replace(/_/g, ' ').replace(/-/g, ' ').trim();
-    if (normalized.includes('no impairment') || normalized === 'no') return 'No Impairment';
-    if (normalized.includes('very mild')) return 'Very Mild Impairment';
-    if (normalized.includes('mild')) return 'Mild Impairment';
-    if (normalized.includes('moderate')) return 'Moderate Impairment';
-    return etatIrm;
-  }
-
-  getEtatIrmColor(etatIrm: string): string {
-    const normalized = (etatIrm || '').toLowerCase().replace(/_/g, ' ').replace(/-/g, ' ').trim();
-    if (normalized.includes('no impairment') || normalized === 'no') return '#10B981';
-    if (normalized.includes('very mild')) return '#F59E0B';
-    if (normalized.includes('mild')) return '#F97316';
-    if (normalized.includes('moderate')) return '#EF4444';
-    return '#6B7280';
   }
 
   openMriModal(): void {
