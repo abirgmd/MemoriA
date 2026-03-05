@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables, TooltipItem } from 'chart.js';
 import { environment } from '../../environments/environment';
 
 Chart.register(...registerables);
@@ -143,12 +143,12 @@ export class StastiqueDiagnosticComponent implements OnInit, AfterViewInit {
           },
           tooltip: {
             callbacks: {
-              title: (items) => {
+              title: (items: TooltipItem<'bar'>[]) => {
                 const idx = items[0].dataIndex;
                 const d = this.statistics!.diagnostics[idx];
                 return d.titre || `Diagnostic ${idx + 1}`;
               },
-              label: (item) => {
+              label: (item: TooltipItem<'bar'>) => {
                 const idx = item.dataIndex;
                 const d = this.statistics!.diagnostics[idx];
                 const lines = [`Score AI: ${item.raw}%`];

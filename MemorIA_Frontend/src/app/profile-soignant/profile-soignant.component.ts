@@ -5,20 +5,27 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { SoignantService } from '../services/soignant.service';
 import { SoignantSignupData } from '../models/signup.model';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { Textarea } from 'primeng/textarea';
+import { InputNumber } from 'primeng/inputnumber';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-profile-soignant',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Toast, ButtonModule, InputText, Textarea, InputNumber, IconField, InputIcon],
+  providers: [MessageService],
   templateUrl: './profile-soignant.component.html',
   styleUrl: './profile-soignant.component.css'
 })
 export class ProfileSoignantComponent {
   isSubmitting = false;
-  errorMessage = '';
-  successMessage = '';
   private readonly fb = inject(FormBuilder);
-  private currentUser: { id: number } | null = null;
+  private currentUser: any = null;
 
   form = this.fb.nonNullable.group({
     numeroOrdre: ['', [Validators.required]],
@@ -34,7 +41,8 @@ export class ProfileSoignantComponent {
   constructor(
     private readonly soignantService: SoignantService,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly messageService: MessageService
   ) {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser) {
@@ -44,19 +52,19 @@ export class ProfileSoignantComponent {
     this.loadExistingProfile();
   }
 
+  get userName(): string {
+    return this.currentUser?.prenom
+      ? `${this.currentUser.prenom} ${this.currentUser.nom ?? ''}`.trim()
+      : 'Soignant';
+  }
+
   onSubmit(): void {
-    if (!this.currentUser) {
-      return;
-    }
+    if (!this.currentUser) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-
     this.isSubmitting = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
     const rawValue = this.form.getRawValue();
     const payload: SoignantSignupData = {
       ...rawValue,
@@ -67,21 +75,19 @@ export class ProfileSoignantComponent {
     this.soignantService.saveProfile(this.currentUser.id, payload).subscribe({
       next: () => {
         this.authService.markProfileCompleted();
-        this.successMessage = 'Profil soignant enregistre.';
+        this.messageService.add({ severity: 'success', summary: 'Profil enregistré', detail: 'Redirection vers votre tableau de bord…' });
         this.isSubmitting = false;
-        setTimeout(() => this.router.navigate(['/home']), 800);
+        setTimeout(() => this.router.navigate(['/dashboard_diagnostic']), 1200);
       },
       error: () => {
-        this.errorMessage = 'Impossible de sauvegarder le profil soignant.';
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de sauvegarder le profil.' });
         this.isSubmitting = false;
       }
     });
   }
 
   private loadExistingProfile(): void {
-    if (!this.currentUser) {
-      return;
-    }
+    if (!this.currentUser) return;
     this.soignantService.getProfile(this.currentUser.id).subscribe({
       next: (profile: any) => {
         this.form.patchValue({
@@ -95,9 +101,7 @@ export class ProfileSoignantComponent {
           dateDebutExercice: profile?.dateDebutExercice ?? ''
         });
       },
-      error: () => {
-        // No existing profile is expected for first login.
-      }
+      error: () => {}
     });
   }
 }

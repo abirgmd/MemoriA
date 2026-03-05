@@ -5,20 +5,40 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { PatientService } from '../services/patient.service';
 import { PatientSignupData } from '../models/signup.model';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-profile-patient',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Toast, ButtonModule, InputText, Select, IconField, InputIcon],
+  providers: [MessageService],
   templateUrl: './profile-patient.component.html',
   styleUrl: './profile-patient.component.css'
 })
 export class ProfilePatientComponent {
   isSubmitting = false;
-  errorMessage = '';
-  successMessage = '';
   private readonly fb = inject(FormBuilder);
-  private currentUser: { id: number } | null = null;
+  private currentUser: any = null;
+
+  sexeOptions = [
+    { label: 'Masculin', value: 'M' },
+    { label: 'Féminin', value: 'F' },
+    { label: 'Autre', value: 'Autre' }
+  ];
+
+  groupeSanguinOptions = [
+    { label: 'Non précisé', value: '' },
+    { label: 'A+', value: 'A_pos' }, { label: 'A-', value: 'A_neg' },
+    { label: 'B+', value: 'B_pos' }, { label: 'B-', value: 'B_neg' },
+    { label: 'AB+', value: 'AB_pos' }, { label: 'AB-', value: 'AB_neg' },
+    { label: 'O+', value: 'O_pos' }, { label: 'O-', value: 'O_neg' }
+  ];
 
   form = this.fb.nonNullable.group({
     dateNaissance: ['', [Validators.required]],
@@ -34,7 +54,8 @@ export class ProfilePatientComponent {
   constructor(
     private readonly patientService: PatientService,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly messageService: MessageService
   ) {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser) {
@@ -44,43 +65,38 @@ export class ProfilePatientComponent {
     this.loadExistingProfile();
   }
 
+  get userName(): string {
+    return this.currentUser?.prenom
+      ? `${this.currentUser.prenom} ${this.currentUser.nom ?? ''}`.trim()
+      : 'Patient';
+  }
+
   onSubmit(): void {
-    if (!this.currentUser) {
-      return;
-    }
+    if (!this.currentUser) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-
     this.isSubmitting = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
     const rawValue = this.form.getRawValue();
-    const payload: PatientSignupData = {
-      ...rawValue,
-      groupeSanguin: rawValue.groupeSanguin || undefined
-    };
+    const payload: PatientSignupData = { ...rawValue, groupeSanguin: rawValue.groupeSanguin || undefined };
 
     this.patientService.saveProfile(this.currentUser.id, payload).subscribe({
       next: () => {
         this.authService.markProfileCompleted();
-        this.successMessage = 'Profil patient enregistre.';
+        this.messageService.add({ severity: 'success', summary: 'Profil enregistré', detail: 'Redirection vers votre espace…' });
         this.isSubmitting = false;
-        setTimeout(() => this.router.navigate(['/diagnostic']), 800);
+        setTimeout(() => this.router.navigate(['/diagnostic']), 1200);
       },
       error: () => {
-        this.errorMessage = 'Impossible de sauvegarder le profil patient.';
+        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de sauvegarder le profil.' });
         this.isSubmitting = false;
       }
     });
   }
 
   private loadExistingProfile(): void {
-    if (!this.currentUser) {
-      return;
-    }
+    if (!this.currentUser) return;
     this.patientService.getProfile(this.currentUser.id).subscribe({
       next: (profile: any) => {
         this.form.patchValue({
@@ -94,9 +110,7 @@ export class ProfilePatientComponent {
           numeroPoliceMutuelle: profile?.numeroPoliceMutuelle ?? ''
         });
       },
-      error: () => {
-        // No existing profile is expected for first login.
-      }
+      error: () => {}
     });
   }
 }

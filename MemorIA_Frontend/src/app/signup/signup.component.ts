@@ -5,11 +5,15 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { SignupRequest } from '../models/signup.model';
 import { AuthUser } from '../auth/auth.model';
+import { ButtonModule } from 'primeng/button';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, InputText, IconField, InputIcon],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -33,6 +37,10 @@ export class SignupComponent {
     private readonly router: Router
   ) {}
 
+  selectRole(role: 'PATIENT' | 'SOIGNANT' | 'ACCOMPAGNANT'): void {
+    this.signupForm.get('role')?.setValue(role);
+  }
+
   onSubmit(): void {
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();
@@ -48,8 +56,7 @@ export class SignupComponent {
     this.authService.signup(payload).subscribe({
       next: (_user: AuthUser) => {
         this.isSubmitting = false;
-        // Après création, l'utilisateur attend l'activation par l'admin puis se connecte.
-        this.successMessage = 'Compte cree. Attendez la confirmation de l administrateur avant connexion.';
+        this.successMessage = 'Compte créé. Attendez la confirmation de l\'administrateur avant connexion.';
         setTimeout(() => this.router.navigate(['/login']), 1500);
       },
       error: (error) => {
