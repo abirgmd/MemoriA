@@ -1,0 +1,192 @@
+.medical-record-wrapper {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+}
+
+/* Loading / error states */
+.state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #6b7280;
+  gap: 1rem;
+}
+.state-box.error { color: #ef4444; }
+.state-icon { font-size: 2.5rem; }
+
+/* Header bar */
+.record-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.record-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.record-title i { font-size: 1.75rem; color: #6366f1; }
+.record-title h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+
+.record-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* Cards */
+.record-container { display: flex; flex-direction: column; gap: 1.25rem; }
+
+:host ::ng-deep .record-card .p-card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+:host ::ng-deep .record-card .p-card-body { padding: 0; }
+:host ::ng-deep .record-card .p-card-content { padding: 1.25rem 1.5rem 1.5rem; }
+
+.card-header-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #4f46e5;
+  background: #f5f3ff;
+  border-bottom: 1px solid #ede9fe;
+  border-radius: 12px 12px 0 0;
+}
+.card-header-label i { font-size: 1.1rem; }
+
+/* Info grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+}
+.info-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.info-item.full-width { grid-column: 1 / -1; }
+
+.info-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+.info-value {
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+.info-value.multiline { white-space: pre-wrap; line-height: 1.6; }
+.notes-text {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-style: italic;
+  color: #475569;
+}
+
+/* ── State actions (error / not-found) ── */
+.state-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* ── QR Code & Sharing section ── */
+.qr-section {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.qr-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.qr-code-img {
+  width: 220px;
+  height: 220px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 6px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.qr-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-align: center;
+  max-width: 220px;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Share panel */
+.share-panel {
+  flex: 1;
+  min-width: 220px;
+}
+
+.share-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-desc {
+  font-size: 0.83rem;
+  color: #64748b;
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+}
+
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.share-btn {
+  width: 100%;
+  justify-content: flex-start !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 0.65rem 1.1rem !important;
+  transition: transform 0.1s ease, box-shadow 0.15s ease !important;
+}
+.share-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important; }
+.share-btn:active { transform: translateY(0); }
+
+.share-whatsapp { background: #25d366 !important; border-color: #25d366 !important; color: #fff !important; }
+.share-whatsapp:hover { background: #1ebe5a !important; border-color: #1ebe5a !important; }
+
+.share-email { background: #4f46e5 !important; border-color: #4f46e5 !important; color: #fff !important; }
+.share-email:hover { background: #4338ca !important; border-color: #4338ca !important; }
+
+.share-copy { background: #64748b !important; border-color: #64748b !important; color: #fff !important; }
+.share-copy:hover { background: #475569 !important; border-color: #475569 !important; }
+.share-copy.copy-done { background: #15803d !important; border-color: #15803d !important; }
+
+@media (max-width: 600px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .info-item.full-width { grid-column: 1; }
+  .qr-section { flex-direction: column; align-items: center; gap: 1.5rem; }
+  .share-panel { width: 100%; }
+}
