@@ -1,0 +1,20 @@
+# Maven
+memoria-backend/target/
+memoria-backend/.mvn/
+
+# Node / Angular
+memoria-frontend/node_modules/
+memoria-frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+/tmp/
+
+# OS
+.DS_Store
+Thumbs.db

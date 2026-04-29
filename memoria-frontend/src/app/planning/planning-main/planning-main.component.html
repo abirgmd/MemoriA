@@ -1,0 +1,327 @@
+<div class="planning-page">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+            <path d="M16 4C16 4 8 10 8 18C8 22.4 11.6 26 16 26C20.4 26 24 22.4 24 18C24 10 16 4 16 4Z" fill="white"/>
+            <circle cx="16" cy="18" r="4" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <span class="brand-name">Memoria</span>
+      </div>
+      <div class="week-nav">
+        <button class="nav-btn" (click)="prevWeek()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <span class="week-label">{{ getWeekRange() }}</span>
+        <button class="nav-btn" (click)="nextWeek()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="view-tabs">
+        <button [class.active]="viewMode === 'today'" (click)="viewMode = 'today'">Aujourd'hui</button>
+        <button [class.active]="viewMode === 'week'" (click)="viewMode = 'week'">Semaine</button>
+        <button [class.active]="viewMode === 'agenda'" (click)="viewMode = 'agenda'">Agenda</button>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="user-info">
+        <div class="user-avatar">{{ currentUser?.prenom?.[0] }}{{ currentUser?.nom?.[0] }}</div>
+        <div class="user-details">
+          <span class="user-name">{{ currentUser?.prenom }} {{ currentUser?.nom }}</span>
+          <span class="user-role badge-role-{{ currentUser?.role }}">{{ currentUser?.role }}</span>
+        </div>
+      </div>
+      <button class="new-btn" (click)="openForm()" *ngIf="isSoignant">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Nouveau
+      </button>
+      <button class="logout-btn" (click)="logout()" title="Déconnexion">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon stat-today">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalToday }}</span>
+        <span class="stat-label">Aujourd'hui</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-week">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalWeek }}</span>
+        <span class="stat-label">Cette semaine</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-confirmed">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ confirmedCount }}</span>
+        <span class="stat-label">Confirmés</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-total">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ appointments.length }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-area">
+
+    <!-- WEEK VIEW -->
+    <div class="calendar-section" *ngIf="viewMode === 'week' || viewMode === 'today'">
+      <div class="calendar-card">
+        <div class="calendar-grid">
+          <!-- Time column -->
+          <div class="time-col">
+            <div class="time-header"></div>
+            <div class="time-slot" *ngFor="let h of hours">{{ h }}:00</div>
+          </div>
+
+          <!-- Day columns -->
+          <div class="day-col" *ngFor="let day of weekDays" [class.today-col]="isToday(day)">
+            <div class="day-header" [class.today-header]="isToday(day)">
+              <span class="day-name">{{ day | date:'EEE':'':'fr' }}</span>
+              <span class="day-num" [class.today-num]="isToday(day)">{{ day | date:'d' }}</span>
+            </div>
+            <div class="hour-cell" *ngFor="let h of hours">
+              <div class="appointment-block"
+                   *ngFor="let appt of getAppointmentsForSlot(day, h)"
+                   [class]="'appt-block type-' + appt.type.toLowerCase()"
+                   (click)="selectAppointment(appt)">
+                <span class="appt-time">{{ formatTime(appt.startTime) }}</span>
+                <span class="appt-title">{{ appt.title }}</span>
+                <span class="appt-patient">{{ appt.patientPrenom }} {{ appt.patientNom }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENDA VIEW -->
+    <div class="agenda-section" *ngIf="viewMode === 'agenda'">
+      <div class="agenda-card" *ngIf="appointments.length === 0 && !loading">
+        <div class="empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <p>Aucun rendez-vous</p>
+        </div>
+      </div>
+      <div class="agenda-list" *ngIf="appointments.length > 0">
+        <div class="agenda-item fade-in" *ngFor="let appt of appointments" (click)="selectAppointment(appt)" [class.selected]="selectedAppointment?.id === appt.id">
+          <div class="agenda-time">
+            <span class="agenda-date">{{ formatFullDate(appt.startTime) }}</span>
+            <span class="agenda-hour">{{ formatTime(appt.startTime) }} – {{ formatTime(appt.endTime) }}</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-title">{{ appt.title }}</span>
+            <span class="agenda-patient">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              {{ appt.patientPrenom }} {{ appt.patientNom }}
+            </span>
+            <span class="type-badge" [class]="getTypeClass(appt.type)">{{ appt.type }}</span>
+          </div>
+          <div class="agenda-status">
+            <span class="badge" [class]="'badge-' + getStatusClass(appt.status)">{{ getStatusLabel(appt.status) }}</span>
+            <div class="agenda-actions" *ngIf="isSoignant">
+              <button class="action-btn edit-btn" (click)="openForm(appt); $event.stopPropagation()" title="Modifier">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button class="action-btn delete-btn" (click)="deleteAppointment(appt.id); $event.stopPropagation()" title="Supprimer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPCOMING APPOINTMENTS -->
+    <div class="upcoming-section" *ngIf="viewMode !== 'agenda'">
+      <div class="upcoming-card">
+        <div class="section-header">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Prochains rendez-vous
+          </h3>
+          <button class="view-all-btn" (click)="viewMode = 'agenda'">Voir tout</button>
+        </div>
+
+        <div class="upcoming-empty" *ngIf="upcomingAppointments.length === 0 && !loading">
+          <p>Aucun rendez-vous à venir</p>
+        </div>
+
+        <div class="upcoming-table" *ngIf="upcomingAppointments.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Date & Heure</th>
+                <th>Patient</th>
+                <th>Type</th>
+                <th>Médecin</th>
+                <th>Statut</th>
+                <th *ngIf="isSoignant">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let appt of upcomingAppointments" [class.selected-row]="selectedAppointment?.id === appt.id" (click)="selectAppointment(appt)">
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">{{ formatFullDate(appt.startTime) }}</span>
+                    <span class="date-time">{{ formatTime(appt.startTime) }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="patient-cell">
+                    <div class="patient-avatar">{{ appt.patientPrenom[0] }}{{ appt.patientNom[0] }}</div>
+                    {{ appt.patientPrenom }} {{ appt.patientNom }}
+                  </div>
+                </td>
+                <td><span class="type-badge" [class]="getTypeClass(appt.type)">{{ appt.type }}</span></td>
+                <td>Dr. {{ appt.doctorPrenom }} {{ appt.doctorNom }}</td>
+                <td>
+                  <span class="badge" [class]="'badge-' + getStatusClass(appt.status)">{{ getStatusLabel(appt.status) }}</span>
+                </td>
+                <td *ngIf="isSoignant">
+                  <div class="table-actions">
+                    <button class="action-btn edit-btn" (click)="openForm(appt); $event.stopPropagation()" title="Modifier">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                    </button>
+                    <button class="action-btn delete-btn" (click)="deleteAppointment(appt.id); $event.stopPropagation()" title="Supprimer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- APPOINTMENT DETAIL PANEL -->
+  <div class="detail-panel" *ngIf="selectedAppointment" [class.visible]="selectedAppointment">
+    <div class="detail-header">
+      <h3>Détails du rendez-vous</h3>
+      <button class="close-btn" (click)="selectedAppointment = null">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-title">{{ selectedAppointment.title }}</div>
+      <div class="detail-row">
+        <span class="detail-key">Patient</span>
+        <span class="detail-val">{{ selectedAppointment.patientPrenom }} {{ selectedAppointment.patientNom }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Médecin</span>
+        <span class="detail-val">Dr. {{ selectedAppointment.doctorPrenom }} {{ selectedAppointment.doctorNom }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Début</span>
+        <span class="detail-val">{{ formatFullDate(selectedAppointment.startTime) }} à {{ formatTime(selectedAppointment.startTime) }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Fin</span>
+        <span class="detail-val">{{ formatFullDate(selectedAppointment.endTime) }} à {{ formatTime(selectedAppointment.endTime) }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Type</span>
+        <span class="type-badge" [class]="getTypeClass(selectedAppointment.type)">{{ selectedAppointment.type }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Statut</span>
+        <span class="badge" [class]="'badge-' + getStatusClass(selectedAppointment.status)">{{ getStatusLabel(selectedAppointment.status) }}</span>
+      </div>
+      <div class="detail-row" *ngIf="selectedAppointment.description">
+        <span class="detail-key">Notes</span>
+        <span class="detail-val description">{{ selectedAppointment.description }}</span>
+      </div>
+
+      <div class="detail-actions" *ngIf="isSoignant">
+        <div class="status-change">
+          <label>Changer le statut</label>
+          <select (change)="updateStatus(selectedAppointment.id, $any($event.target).value)" [value]="selectedAppointment.status">
+            <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+          </select>
+        </div>
+        <button class="btn-primary" style="width:100%" (click)="openForm(selectedAppointment)">Modifier</button>
+        <button class="btn-danger" style="width:100%;margin-top:8px" (click)="deleteAppointment(selectedAppointment.id)">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" *ngIf="loading">
+    <div class="loader"></div>
+  </div>
+
+</div>
+
+<!-- APPOINTMENT FORM MODAL -->
+<app-appointment-form
+  *ngIf="showForm"
+  [editingAppointment]="editingAppointment"
+  (saved)="onFormSaved()"
+  (cancelled)="closeForm()">
+</app-appointment-form>

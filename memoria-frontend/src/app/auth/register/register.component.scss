@@ -1,0 +1,75 @@
+@import '../login/login.component.scss';
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .required {
+    color: #EF4444;
+    margin-left: 2px;
+  }
+
+  input, select {
+    padding: 11px 14px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #1F2937;
+    background: #F9FAFB;
+    transition: all 0.2s;
+    width: 100%;
+    font-family: inherit;
+
+    &:focus {
+      border-color: #6C3FC5;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(108,63,197,0.08);
+      outline: none;
+    }
+
+    &::placeholder { color: #9CA3AF; }
+  }
+}
+
+.has-error input,
+.has-error select {
+  border-color: #EF4444;
+  background: #FFF5F5;
+}
+
+.input-wrapper {
+  position: relative;
+
+  input {
+    padding-right: 42px;
+  }
+
+  .toggle-pwd {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+
+    &:hover { color: #6C3FC5; }
+  }
+}
