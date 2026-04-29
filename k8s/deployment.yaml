@@ -1,0 +1,20 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memoria-app
+  namespace: memoria-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: memoria
+  template:
+    metadata:
+      labels:
+        app: memoria
+    spec:
+      containers:
+      - name: memoria-container
+        image: oussama433/memoria-service-a:latest
+        ports:
+        - containerPort: 80
