@@ -14,7 +14,7 @@ Voici la documentation complète de MemoriA, enrichie avec :
 
 MemoriA — Plateforme Sécurisée de Suivi Cognitif Alzheimer
 
-Plateforme numérique sécurisée dédiée à l’évaluation cognitive des patients atteints de la maladie d’Alzheimer.
+Plateforme numérique sécurisée dédiée à l'évaluation cognitive des patients atteints de la maladie d'Alzheimer.
 Architecture microservices sécurisée avec Keycloak, API Gateway et Service Discovery.
 
 Table des matières
@@ -52,7 +52,7 @@ MemoriA permet :
 
 Aux médecins (ROLE_MEDECIN) de créer et assigner des tests cognitifs.
 
-Aux aidants (ROLE_AIDANT) de suivre l’évolution cognitive du patient.
+Aux aidants (ROLE_AIDANT) de suivre l'évolution cognitive du patient.
 
 Aux patients (ROLE_PATIENT) de passer les tests.
 
@@ -99,7 +99,7 @@ ROLE_ADMIN	Administration système
 ROLE_MEDECIN	Création et analyse des tests
 ROLE_AIDANT	Consultation des métriques
 ROLE_PATIENT	Passage des tests
-🔑 Flux d’authentification
+🔑 Flux d'authentification
 Utilisateur → Keycloak Login Page
           → JWT Token
           → API Gateway (validation JWT)
@@ -129,7 +129,7 @@ Spring Boot ne gère jamais les mots de passe.
 
 Utilisation de Eureka Server.
 
-Chaque service s’enregistre automatiquement :
+Chaque service s'enregistre automatiquement :
 
 user-service
 
@@ -141,7 +141,7 @@ api-gateway
 
 🌐 API Gateway
 
-Point d’entrée unique
+Point d'entrée unique
 
 Validation JWT
 
@@ -396,15 +396,3 @@ MemoriA est désormais :
 ✔ Scalabilité via Kubernetes
 ✔ DevOps-ready
 ✔ Conforme aux bonnes pratiques OAuth2
-
-Si tu veux maintenant, je peux :
-
-🔥 Générer un diagramme architecture professionnel en image
-
-📄 Générer un PDF prêt à rendre
-
-🧱 Générer docker-compose complet
-
-☸ Générer fichiers Kubernetes YAML
-
-📊 Générer une présentation PowerPoint soutenance
