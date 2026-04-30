@@ -1,0 +1,21 @@
+<div class="sidebar">
+  <div class="logo-section">
+    <i class="fas fa-brain logo-icon"></i>
+    <h2 class="logo-text">Memoria</h2>
+  </div>
+
+  <div class="navigation-label">MENU</div>
+
+  <nav class="menu">
+    <a *ngFor="let item of menuItems"
+       [routerLink]="item.route"
+       class="menu-item"
+       [class.active]="isActive(item.route!)">
+      <i [class]="item.icon" class="menu-icon"></i>
+      <span class="menu-label">{{ item.label }}</span>
+      <span *ngIf="item.badge" [class]="'badge ' + item.badgeColor">
+        {{ item.badge }}
+      </span>
+    </a>
+  </nav>
+</div>

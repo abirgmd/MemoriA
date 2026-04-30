@@ -1,0 +1,37 @@
+<div class="profile-page">
+  <h1>Caregiver Profile</h1>
+  <p>Complete your care assistance information.</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>Relationship with Patient
+      <select formControlName="lienPatient">
+        <option value="familial">Family Member</option>
+        <option value="professionnel">Professional</option>
+      </select>
+    </label>
+    <label>Date of Birth <input type="date" formControlName="dateNaissance" /></label>
+    <label>Address <input type="text" formControlName="adresse" /></label>
+    <label>Postal Code <input type="text" formControlName="codePostal" /></label>
+    <label>City <input type="text" formControlName="ville" /></label>
+    <label>Emergency Phone <input type="text" formControlName="telephoneSecours" /></label>
+    <label>Professional Status
+      <select formControlName="situationPro">
+        <option value="">Not Specified</option>
+        <option value="salarie">Employed</option>
+        <option value="retraite">Retired</option>
+        <option value="sans_activite">Inactive</option>
+      </select>
+    </label>
+    <label>Care Frequency
+      <select formControlName="frequenceAccompagnement">
+        <option value="quotidien">Daily</option>
+        <option value="hebdo">Weekly</option>
+        <option value="mensuel">Monthly</option>
+      </select>
+    </label>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <button type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Saving...' : 'Save' }}</button>
+  </form>
+</div>

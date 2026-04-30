@@ -1,0 +1,19 @@
+# IDE and editor folders
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Frontend dependencies and build
+node_modules/
+.angular/
+dist/
+
+# Backend build
+target/
+*.class

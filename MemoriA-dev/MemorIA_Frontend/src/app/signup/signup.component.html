@@ -1,0 +1,73 @@
+<div class="signup-page">
+  <nav class="topbar">
+    <button class="ghost-btn" type="button" (click)="backToHome()">Back</button>
+    <h1>Sign Up</h1>
+    <a class="ghost-link" routerLink="/users">User List</a>
+  </nav>
+
+  <main class="signup-content">
+    <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <h2 class="form-section-title">Common Information</h2>
+      <div class="field-grid">
+        <label>
+          Last Name
+          <input type="text" formControlName="nom" />
+          <span class="field-error" *ngIf="signupForm.get('nom')?.invalid && signupForm.get('nom')?.touched">
+            Min. 2 characters
+          </span>
+        </label>
+        <label>
+          First Name
+          <input type="text" formControlName="prenom" />
+          <span class="field-error" *ngIf="signupForm.get('prenom')?.invalid && signupForm.get('prenom')?.touched">
+            Min. 2 characters
+          </span>
+        </label>
+        <label>
+          Email
+          <input type="email" formControlName="email" />
+          <span class="field-error" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+            Invalid email
+          </span>
+        </label>
+        <label>
+          Phone
+          <input type="tel" formControlName="telephone" />
+          <span class="field-error" *ngIf="signupForm.get('telephone')?.invalid && signupForm.get('telephone')?.touched">
+            Min. 8 characters
+          </span>
+        </label>
+        <label>
+          Account Type
+          <select formControlName="role">
+            <option value="PATIENT">Patient</option>
+            <option value="SOIGNANT">Healthcare Professional</option>
+            <option value="ACCOMPAGNANT">Caregiver</option>
+          </select>
+        </label>
+        <label>
+          Password
+          <input type="password" formControlName="password" />
+          <span class="field-error" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+            Min. 6 characters
+          </span>
+        </label>
+      </div>
+
+      <p class="info">
+        You are only providing common information here. After validation by an administrator
+        and your first login, you will be redirected to a personalized interface (Patient, Healthcare Professional, or
+        Caregiver) to complete your detailed personal information.
+      </p>
+      <p class="info">
+        After registration, your account must be confirmed by an administrator before you can log in.
+      </p>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+
+      <button class="submit-btn" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating...' : 'Create Account' }}
+      </button>
+    </form>
+  </main>
+</div>

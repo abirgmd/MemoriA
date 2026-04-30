@@ -1,0 +1,19 @@
+<div class="profile-page">
+  <h1>Healthcare Professional Profile</h1>
+  <p>Complete your professional information.</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>License Number <input type="text" formControlName="numeroOrdre" /></label>
+    <label>Specialty <input type="text" formControlName="specialite" /></label>
+    <label>Hospital <input type="text" formControlName="hopital" /></label>
+    <label>Secondary Phone <input type="text" formControlName="numeroTelephone2" /></label>
+    <label>Credentials <textarea formControlName="diplomes"></textarea></label>
+    <label>Years of Experience <input type="number" formControlName="anneesExperience" min="0" /></label>
+    <label>Biography <textarea formControlName="biographie"></textarea></label>
+    <label>Date of Practice Start <input type="date" formControlName="dateDebutExercice" /></label>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <button type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Saving...' : 'Save' }}</button>
+  </form>
+</div>

@@ -1,0 +1,191 @@
+# =====================================
+# ENVIRONMENT & SECRETS
+# =====================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+
+# =====================================
+# IDE & EDITORS
+# =====================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.c9/
+
+# =====================================
+# BUILD ARTIFACTS - BACKEND (Java/Maven)
+# =====================================
+target/
+MemoriA-dev/MemorIA_Backend/target/
+*.jar
+*.war
+*.ear
+*.class
+*.jar.asc
+.m2/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.flattened-pom.xml
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# Maven-specific
+.maven-settings.xml
+
+# =====================================
+# BUILD ARTIFACTS - FRONTEND (Angular/Node)
+# =====================================
+MemoriA-dev/MemorIA_Frontend/node_modules/
+MemoriA-dev/MemorIA_Frontend/dist/
+MemoriA-dev/MemorIA_Frontend/.angular/
+MemoriA-dev/MemorIA_Frontend/build/
+MemoriA-dev/MemorIA_Frontend/.cache/
+MemoriA-dev/MemorIA_Frontend/coverage/
+
+# Node
+node_modules/
+npm-debug.log*
+npm-error.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# =====================================
+# LOG FILES
+# =====================================
+*.log
+logs/
+*.stackdump
+
+# Application logs
+MemoriA-dev/MemorIA_Backend/logs/
+application.log
+spring.log
+
+# Browser logs
+ng-serve.log
+build.log
+
+# =====================================
+# DATABASE
+# =====================================
+*.db
+*.sqlite
+*.sqlite3
+*.sql.bak
+
+# =====================================
+# TEMPORARY & BACKUP FILES
+# =====================================
+*.tmp
+*.bak
+*.backup
+*~
+*.swn
+*.swo
+.DS_Store
+Thumbs.db
+*.orig
+
+# =====================================
+# GRADLE (if used)
+# =====================================
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# =====================================
+# TEST ARTIFACTS
+# =====================================
+target/surefire-reports/
+coverage/
+.nyc_output/
+dist/coverage
+
+# =====================================
+# OS SPECIFIC
+# =====================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+
+# =====================================
+# APPLICATION CONFIGURATION (SECRETS)
+# =====================================
+application.properties.local
+application-local.properties
+application-dev.properties
+application-test.properties
+application-prod.properties
+application*.properties.local
+*.properties.local
+src/main/resources/application-local.properties
+src/main/resources/application-dev.properties
+!src/main/resources/application.properties
+!src/main/resources/application-test.properties
+!src/main/resources/init.sql
+
+# =====================================
+# DEVELOPMENT ARTIFACTS
+# =====================================
+.vscode/
+.idea/
+out/
+bin/
+dist/
+build/
+
+# =====================================
+# DOCKER & CONTAINERS
+# =====================================
+docker-compose.override.yml
+.dockerignore
+
+# =====================================
+# MISC
+# =====================================
+.tern-port
+.history
+.env.example
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+secrets.txt
+credentials.json
+
